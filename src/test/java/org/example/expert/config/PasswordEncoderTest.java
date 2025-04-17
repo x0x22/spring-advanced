@@ -20,7 +20,9 @@ class PasswordEncoderTest {
         String encodedPassword = passwordEncoder.encode(rawPassword);
 
         // when
-        boolean matches = passwordEncoder.matches(encodedPassword, rawPassword);
+        // PasswordEncoder의 matches 파라 미터 순서가 달라 오류가 발생
+        // PasswordEncoderTest의 순서를 rawPassword, encodedPassword 로 수정
+        boolean matches = passwordEncoder.matches(rawPassword, encodedPassword);
 
         // then
         assertTrue(matches);
