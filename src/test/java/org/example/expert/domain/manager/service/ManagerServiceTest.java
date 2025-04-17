@@ -41,11 +41,19 @@ class ManagerServiceTest {
     @Test
     public void manager_목록_조회_시_Todo가_없다면_NPE_에러를_던진다() {
         // given
+        // todoId를 1로 설정, 투두레포지토리에서 입력받은 todoId로 찾음
+        // 그리고 Optional.empty 돌려줌
         long todoId = 1L;
         given(todoRepository.findById(todoId)).willReturn(Optional.empty());
 
         // when & then
-        InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> managerService.getManagers(todoId));
+        // InvalidRequestException = 유효하지 않은 요청일 경우 던지는 예외
+        // assertThrows -> 예외검증용 테스트메서드
+        // 테스트 메서드가 managerService.getManagers(todoId)를 호출
+        // 목록에 Todo가 없으면 NPE 에러를 던져야함
+        // NPE = NullPointerException
+        // InvalidRequestException 을 NullPointerException 수정
+        NullPointerException exception = assertThrows(NullPointerException.class, () -> managerService.getManagers(todoId));
         assertEquals("Manager not found", exception.getMessage());
     }
 
