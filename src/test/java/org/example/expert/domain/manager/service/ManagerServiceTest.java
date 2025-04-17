@@ -39,7 +39,7 @@ class ManagerServiceTest {
     private ManagerService managerService;
 
     @Test
-    public void manager_목록_조회_시_Todo가_없다면_NPE_에러를_던진다() {
+    public void manager_목록_조회_시_Todo가_없다면_InvalidRequestException_에러를_던진다() {
         // given
         // todoId를 1로 설정, 투두레포지토리에서 입력받은 todoId로 찾음
         // 그리고 Optional.empty 돌려줌
@@ -53,8 +53,15 @@ class ManagerServiceTest {
         // 목록에 Todo가 없으면 NPE 에러를 던져야함
         // NPE = NullPointerException
         // InvalidRequestException 을 NullPointerException 수정
-        NullPointerException exception = assertThrows(NullPointerException.class, () -> managerService.getManagers(todoId));
-        assertEquals("Manager not found", exception.getMessage());
+        // ===================================================
+        // 완전 잘못 생각함.
+        // NullPointerException 에러를 던지는게 아니라 getManagers를 타고 들어가보니
+        // InvalidRequestException 에러 맞았고, "Todo not found" 메세지가 출력되어야했는데
+        // assertEquals("Manager not found", exception.getMessage()); 여서
+        // Manager not found 를 Todo not found 로 변경
+        // 메서드 명 또한 NPE 가 아닌 InvalidRequestException_에러를_던진다로 수정
+        InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> managerService.getManagers(todoId));
+        assertEquals("Todo not found", exception.getMessage());
     }
 
     @Test
