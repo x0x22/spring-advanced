@@ -67,18 +67,26 @@ class ManagerServiceTest {
     @Test
     void todo의_user가_null인_경우_예외가_발생한다() {
         // given
+        // 인증된 유저를 하나 던져줌
         AuthUser authUser = new AuthUser(1L, "a@a.com", UserRole.USER);
         long todoId = 1L;
+        // 매니저 ID 주입
         long managerUserId = 2L;
 
         Todo todo = new Todo();
+
+        // ReflectionTestUtils.setField -> 비공개(private) 필드에 값을 강제로 주입해주는 메서드이다.
+        // 유저를 null로 설정
         ReflectionTestUtils.setField(todo, "user", null);
 
+        // 일정 작성자가 주는 아이디값 managerSaveRequest 에 집어넣음
         ManagerSaveRequest managerSaveRequest = new ManagerSaveRequest(managerUserId);
 
+        // todoRepository에 findById에 todoId을 넣으면 todo를 반환함
         given(todoRepository.findById(todoId)).willReturn(Optional.of(todo));
 
         // when & then
+        // saveManager에 (authUser, todoId, managerSaveRequest)를 집어넣으면 InvalidRequestException 발생
         InvalidRequestException exception = assertThrows(InvalidRequestException.class, () ->
             managerService.saveManager(authUser, todoId, managerSaveRequest)
         );
