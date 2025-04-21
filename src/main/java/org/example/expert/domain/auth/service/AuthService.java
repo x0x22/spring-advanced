@@ -33,7 +33,7 @@ public class AuthService {
             throw new InvalidRequestException("이미 존재하는 이메일입니다.");
         }
 
-        // 유저 권한 확인 -> 성능적으로 상관은 없지만? 패스워드 인코딩 부분보다는 위에 위치하는게 자연스럽다.
+        // 유저 권한 부여 -> 성능적으로 상관은 없지만? 패스워드 인코딩 부분보다는 위에 위치하는게 자연스럽다.
         UserRole userRole = UserRole.of(signupRequest.getUserRole());
 
         // 패스워드 인코딩 하는 부분
